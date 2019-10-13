@@ -70,7 +70,7 @@ def  adminMenuSelection(args):
     elif args == 3:
         booking()
     elif args == 4:
-        exit()
+        start()
 
 def admin():
     print("Bookings")
