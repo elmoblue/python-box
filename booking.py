@@ -40,7 +40,7 @@ class Booking:
     @staticmethod
     def printBookingRecords():
             bookingRecords = Booking.getRecords()
-            print( "-------------------------------------------------------------------------BOOKING RECORDS----------------------------------------------------------------------------------")
+            print("-------------------------------------------------------------------------BOOKING RECORDS----------------------------------------------------------------------------------")
             for row in bookingRecords:
                 userModel = User.getbyID(row[2])
                 eventModel = Services.getbyID(row[1])

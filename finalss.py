@@ -11,12 +11,10 @@ def selection(args):
     if args == 1:
        login()
     elif args == 2:
-        # register()
         menuselect()
-    elif args == 3:
+    else:
+        print("ERROR! PLEASE CHOOSE THE CORRECT OPTION FROM THE MENU!")
         exit()
-
-
 
 def checkDB():
     Record.checkConnection()
@@ -34,7 +32,7 @@ def login():
         if userName == 'admin' and password == 'minda':
             adminMenuArgs()
         else:
-            print("username or password inavlid!")
+            print("username or password invalid!")
             print("Do you want to try again?")
             choice = raw_input("(Y)es or (N)o")
             if (choice == "y") or (choice == "Y"):
@@ -51,6 +49,69 @@ def adminMenu():
     print("4. EXIT")
     print("----------------------")
 
+def userMenu():
+    print("----------------------")
+    print("SELECT YOUR MENU:")
+    print("1. BOOK")
+    print("2. EXIT")
+    print("----------------------")
+
+def userMenuSelection(args):
+    if args == 1:
+        userAdmin()
+    elif args == 2:
+        start()
+
+def userMenuArgs():
+    userMenu()
+    try:
+        args = int(raw_input("PLEASE SELECT YOUR OPTION: "))
+        userMenuSelection(args)
+    except ValueError:
+        print("\n")
+        print("ERROR! PLEASE CHOOSE THE CORRECT OPTION FROM THE MENU!")
+        userMenu()
+
+def userBooking():
+    User.printUserRecords()
+    userID = int(raw_input("Please enter the id of the user to book: "))
+    Services.printServices()
+    servicesID = int(raw_input("Please enter the id of the service chosen by the customer: "))
+
+    userObject = User.getbyID(userID)
+    serviceObject = Services.getbyID(servicesID)
+    bookingObject = Booking()
+    bookingObject.customerID = userObject.userid
+    bookingObject.serviceID = serviceObject.servicesid
+    bookingObject.voucher_id = Booking.generateVoucher()
+
+    choice = option("Would you like to save changes")
+    if choice == "Y":
+        bookingObject.save()
+        print("Event records successfully saved!")
+        print("Voucher ID: {}" .format(bookingObject.voucher_id))
+        print("Please keep the voucher number for booking reference! ")
+    else:
+        start()
+    choice = option("Would you like to add more booking")
+    if choice == "Y":
+        userBooking()
+    else:
+        userMenuArgs()
+
+def userAdmin():
+    print("Bookings")
+    print("----------------------")
+    userBooking()
+    print("----------------------")
+    print("Do you want to exit?")
+    choice = raw_input("(Y)es or (N)o")
+    print()
+    if (choice == "y") or (choice == "Y"):
+        start()
+    else:
+        admin()
+
 def adminMenuArgs():
     adminMenu()
     try:
@@ -62,7 +123,7 @@ def adminMenuArgs():
         adminMenu()
 
 # args for adminMenu
-def  adminMenuSelection(args):
+def adminMenuSelection(args):
     if args == 1:
         register()
     elif args == 2:
@@ -100,7 +161,7 @@ def register():
     if choice == "Y":
         register()
     else:
-        adminMenuArgs()
+        userMenuArgs()
 
 # adminMenu booking
 def booking():
@@ -133,6 +194,7 @@ def booking():
 def echobooking():
     Booking.printBookingRecords()
 
+# Menu for user type
 def menu():
     print("----------------------")
     print("PLEASE SELECT OPTION")
@@ -146,7 +208,6 @@ def check(args):
     if args == 1:
         register()
     elif args == 2:
-        # echobooking()
         userViewBooking()
     elif args == 3:
         exit()
@@ -180,28 +241,34 @@ def menuselect():
         print("ERROR! PLEASE CHOOSE THE CORRECT OPTION FROM THE MENU!")
         menu()
 
-# Menu for user type
-def userMenu():
-    print("----------------------")
-    print("What can we do for you ?")
-    print("1. REGISTER")
-    print("2. VIEW BOOKING")
-    print("3. EXIT")
-    print("----------------------")
+
+# def userMenu():
+#     print("----------------------")
+#     print("What can we do for you ?")
+#     print("1. REGISTER")
+#     print("2. VIEW BOOKING")
+#     print("3. EXIT")
+#     print("----------------------")
 
  # args for user menu
-def userMenuSelection(args):
-    if args == 1:
-        register()
-    elif args == 2:
-        userViewBooking()
-        menuselect()
-    elif args == 3:
-        exit()
+# def userMenuSelection(args):
+#     if args == 1:
+#         register()
+#     elif args == 2:
+#         userViewBooking()
+#         menuselect()
+#     elif args == 3:
+#         exit()
 
 def userViewBooking():
     userVoucher = int(raw_input("Voucher ID: "))
     Booking.printSingleRecord(userVoucher)
+
+    choice = option("Press any key to go back!")
+    if choice == "Y":
+        menuselect()
+    else:
+        menuselect()
 
 def start():
     choose()
